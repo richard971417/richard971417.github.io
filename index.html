@@ -6,10 +6,73 @@
     <title>OTP Generator</title>
     <!-- Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <!-- CryptoJS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #74b9ff 0%, #fd79a8 100%);
+            color: white;
+            font-family: 'Arial', sans-serif;
+            min-height: 100vh;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+        }
+        h1 {
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            margin-bottom: 30px;
+        }
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            color: #333;
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+        }
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+        .card-title {
+            color: #090979;
+            font-weight: bold;
+        }
+        .card-text {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #00d4ff;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+            transition: opacity 0.5s ease;
+        }
+        .progress {
+            height: 12px;
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.3);
+        }
+        .progress-bar {
+            background: linear-gradient(90deg, #00d4ff 0%, #090979 100%);
+            transition: width 1s ease;
+            border-radius: 6px;
+        }
+        .text-center.mt-2 {
+            color: #333;
+            font-weight: 500;
+        }
+        .progress-bar.danger {
+            background: linear-gradient(90deg, #ff6b6b 0%, #ee5a24 100%);
+        }
+    </style>
 </head>
 <body>
     <div class="container mt-5">
@@ -19,98 +82,68 @@
         </div>
     </div>
 
+    <script src='totp.js'></script>
     <script>
-        // Function to decode base32
-        function base32Decode(str) {
-            const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
-            let bits = '';
-            for (let char of str.toUpperCase()) {
-                const index = alphabet.indexOf(char);
-                if (index === -1) continue;
-                bits += index.toString(2).padStart(5, '0');
+        async function loadData() {
+            try {
+                const response = await fetch('data.json');
+                const data = await response.json();
+                return data;
+            } catch (error) {
+                console.error('Error loading data:', error);
+                return {};
             }
-            const bytes = [];
-            for (let i = 0; i < bits.length; i += 8) {
-                const chunk = bits.substr(i, 8);
-                if (chunk.length === 8) {
-                    bytes.push(parseInt(chunk, 2));
-                }
-            }
-            return new Uint8Array(bytes);
         }
 
-        // Function to generate TOTP
-        function generateTOTP(secret, timeStep = 30) {
-            const key = base32Decode(secret);
-            const time = Math.floor(Date.now() / 1000);
-            const counter = Math.floor(time / timeStep);
-            const counterBytes = [];
-            for (let i = 7; i >= 0; i--) {
-                counterBytes.push((counter >> (i * 8)) & 0xff);
-            }
-            const hmac = CryptoJS.HmacSHA1(CryptoJS.lib.WordArray.create(counterBytes), CryptoJS.lib.WordArray.create(key));
-            const hash = hmac.toString(CryptoJS.enc.Hex);
-            const offset = parseInt(hash.substr(hash.length - 1), 16);
-            const code = (parseInt(hash.substr(offset * 2, 8), 16) & 0x7fffffff) % 1000000;
-            return code.toString().padStart(6, '0');
+        function generateOTP(secret) {
+            const totp = new jsOTP.totp();
+            return totp.getOtp(secret);
         }
 
-        // Function to update OTPs
-        function updateOTPs() {
-            fetch('data.json')
-                .then(response => response.json())
-                .then(data => {
-                    const otpList = document.getElementById('otp-list');
-                    otpList.innerHTML = '';
-                    for (const account in data) {
-                        const secret = data[account].secret;
-                        const type = data[account].type;
-                        if (type === 'totp') {
-                            const otp = generateTOTP(secret);
-                            const otpItem = document.createElement('div');
-                            otpItem.className = 'card mb-3';
-                            const safeId = account.replace(/[^a-zA-Z0-9]/g, '');
-                            otpItem.innerHTML = `
-                                <div class="card-body">
-                                    <h5 class="card-title">${account}</h5>
-                                    <p class="card-text">OTP: <strong id="otp-${safeId}">${otp}</strong></p>
-                                    <div class="progress mt-2">
-                                        <div class="progress-bar" role="progressbar" id="progress-${safeId}" style="width: 100%"></div>
-                                    </div>
-                                    <small class="text-muted" id="time-${safeId}">30 seconds remaining</small>
-                                </div>
-                            `;
-                            otpList.appendChild(otpItem);
-                        }
-                    }
-                })
-                .catch(error => console.error('Error loading data:', error));
-        }
-
-        // Function to update progress
-        function updateProgress() {
+        function getTimeRemaining() {
             const now = Math.floor(Date.now() / 1000);
-            const remaining = 30 - (now % 30);
-            // Assuming cards are already created, update them
-            const otpList = document.getElementById('otp-list');
-            const cards = otpList.querySelectorAll('.card');
-            cards.forEach(card => {
-                const safeId = card.querySelector('.card-title').textContent.replace(/[^a-zA-Z0-9]/g, '');
-                const progressBar = card.querySelector(`#progress-${safeId}`);
-                const timeText = card.querySelector(`#time-${safeId}`);
-                if (progressBar && timeText) {
-                    const percentage = (remaining / 30) * 100;
-                    progressBar.style.width = percentage + '%';
-                    timeText.textContent = remaining + ' seconds remaining';
-                }
-            });
+            return 30 - (now % 30);
         }
 
-        // Update OTPs on load and every 30 seconds
-        updateOTPs();
-        setInterval(updateOTPs, 30000);
-        // Update progress every second
-        setInterval(updateProgress, 1000);
+        function renderOTPList(data) {
+            const otpList = document.getElementById('otp-list');
+            otpList.innerHTML = '';
+
+            for (const [account, config] of Object.entries(data)) {
+                if (config.type === 'totp') {
+                    const otp = generateOTP(config.secret);
+                    const timeRemaining = getTimeRemaining();
+                    const progress = ((30 - timeRemaining) / 30) * 100;
+
+                    const card = document.createElement('div');
+                    card.className = 'card mb-3';
+                    const progressBarClass = timeRemaining <= 5 ? 'progress-bar danger' : 'progress-bar';
+                    card.innerHTML = `
+                        <div class="card-body">
+                            <h5 class="card-title"><i class="fas fa-lock"></i> ${account}</h5>
+                            <h2 class="card-text text-center font-weight-bold fade-in">${otp}</h2>
+                            <div class="progress mt-3">
+                                <div class="${progressBarClass}" role="progressbar" style="width: ${progress}%" aria-valuenow="${progress}" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                            <p class="text-center mt-2">Expires in ${timeRemaining} seconds</p>
+                        </div>
+                    `;
+                    otpList.appendChild(card);
+                }
+            }
+        }
+
+        async function init() {
+            const data = await loadData();
+            renderOTPList(data);
+
+            // Update every second
+            setInterval(() => {
+                renderOTPList(data);
+            }, 1000);
+        }
+
+        document.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
 </html>
