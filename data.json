@@ -2,5 +2,9 @@
     "dtruong333@mmocommunity.io.vn":{
         "secret" : "DZC45N3SRPCXGDHGB3LABIKQQSBPP5ND",
         "type" : "totp"
+    },
+    "predator.shen2024@gmail.com" : {
+        "secret" : "MCDQEKVTEUZRYZNOT34OGQVVD3R37LWX",
+        "type" : "totp"
     }
 }
