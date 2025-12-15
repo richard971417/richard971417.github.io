@@ -6,5 +6,9 @@
     "predator.shen2024@gmail.com" : {
         "secret" : "MCDQEKVTEUZRYZNOT34OGQVVD3R37LWX",
         "type" : "totp"
+    },
+    "3r2wd42t3e@tempmail.id.vn" : {
+        "secret" : "XETGDIZOX5EQLO43LBFCN5GYYQDLQF6J",
+        "type" : "totp"
     }
 }
