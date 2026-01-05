@@ -10,5 +10,9 @@
     "3r2wd42t3e@tempmail.id.vn" : {
         "secret" : "XETGDIZOX5EQLO43LBFCN5GYYQDLQF6J",
         "type" : "totp"
+    },
+    "dantruong.hungyen@gmail.com": {
+        "secret" : "LHUDOUVEKLQDEPMGJX3AR5HHVLI5WPG2",
+        "type" : "totp"
     }
 }
