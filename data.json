@@ -18,5 +18,9 @@
     "Nguyenducduy2612@icloud.com" : {
         "secret": "MXGEFC7A5IKJ2GSH",
         "type" : "totp"
+    },
+    "Mingduc1608" :{
+        "secret" : "PDNDBVGAAHY26ZSF",
+        "type" : "totp"
     }
 }
