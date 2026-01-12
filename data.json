@@ -14,5 +14,9 @@
     "dantruong.hungyen@gmail.com": {
         "secret" : "LHUDOUVEKLQDEPMGJX3AR5HHVLI5WPG2",
         "type" : "totp"
+    },
+    "Nguyenducduy2612@icloud.com" : {
+        "secret": "MXGEFC7A5IKJ2GSH",
+        "type" : "totp"
     }
 }
