@@ -1,26 +1,50 @@
 {
     "dtruong333@mmocommunity.io.vn":{
         "secret" : "DZC45N3SRPCXGDHGB3LABIKQQSBPP5ND",
-        "type" : "totp"
+        "type" : "totp",
+        "username": "dtruong333@mmocommunity.io.vn",
+        "group": "ChatGPT",
+        "url": "https://chatgpt.com/",
+        "hidden": true
     },
     "predator.shen2024@gmail.com" : {
         "secret" : "MCDQEKVTEUZRYZNOT34OGQVVD3R37LWX",
-        "type" : "totp"
+        "type" : "totp",
+        "username": "predator.shen2024@gmail.com",
+        "group": "ChatGPT",
+        "url": "https://chatgpt.com/",
+        "hidden": true
     },
     "3r2wd42t3e@tempmail.id.vn" : {
         "secret" : "XETGDIZOX5EQLO43LBFCN5GYYQDLQF6J",
-        "type" : "totp"
+        "type" : "totp",
+        "username": "3r2wd42t3e@tempmail.id.vn",
+        "group": "ChatGPT",
+        "url": "https://chatgpt.com/",
+        "hidden": false
     },
     "dantruong.hungyen@gmail.com": {
         "secret" : "LHUDOUVEKLQDEPMGJX3AR5HHVLI5WPG2",
-        "type" : "totp"
+        "type" : "totp",
+        "username": "dantruong.hungyen@gmail.com",
+        "group": "ChatGPT",
+        "url": "https://chatgpt.com/",
+        "hidden": false
     },
     "Nguyenducduy2612@icloud.com" : {
         "secret": "MXGEFC7A5IKJ2GSH",
-        "type" : "totp"
+        "type" : "totp",
+        "username": "Nguyenducduy2612@icloud.com",
+        "group": "Github",
+        "url": "https://github.com/",
+        "hidden": false
     },
     "Mingduc1608" :{
         "secret" : "PDNDBVGAAHY26ZSF",
-        "type" : "totp"
+        "type" : "totp",
+        "username": "Mingduc1608",
+        "group": "Github",
+        "url": "https://github.com/",
+        "hidden": false
     }
 }

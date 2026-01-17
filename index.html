@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OTP Generator</title>
+    <title>Khong co tieu de</title>
+    <link rel="icon" type="image/png" href="clown.png">
     <!-- Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
@@ -14,91 +15,194 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <style>
         body {
-            background: linear-gradient(135deg, #74b9ff 0%, #fd79a8 100%);
-            color: white;
-            font-family: 'Arial', sans-serif;
+            background: #f5f7fa;
+            color: #2c3e50;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
             min-height: 100vh;
+            padding: 20px 0;
         }
         .container {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
-            padding: 30px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-            backdrop-filter: blur(10px);
+            max-width: 1200px;
         }
         h1 {
-            color: white;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-            margin-bottom: 30px;
+            color: #2c3e50;
+            font-weight: 600;
+            margin-bottom: 40px;
+            font-size: 2rem;
         }
         .card {
-            background: rgba(255, 255, 255, 0.95);
-            color: #333;
-            border: none;
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            background: #ffffff;
+            color: #2c3e50;
+            border: 1px solid #e1e8ed;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
             transition: all 0.3s ease;
             margin-bottom: 20px;
         }
         .card:hover {
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+            transform: translateY(-2px);
+        }
+        .card-header {
+            background: #ffffff;
+            border-bottom: 1px solid #e1e8ed;
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            border-radius: 12px 12px 0 0 !important;
+        }
+        .favicon {
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            margin-right: 12px;
+            object-fit: contain;
         }
         .card-title {
-            color: #090979;
-            font-weight: bold;
+            color: #2c3e50;
+            font-weight: 600;
+            margin: 0;
+            font-size: 1.1rem;
+            flex: 1;
         }
-        .card-text {
+        .credential-row {
+            display: flex;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid #f5f7fa;
+        }
+        .credential-row:last-child {
+            border-bottom: none;
+        }
+        .credential-label {
+            font-size: 0.85rem;
+            color: #7f8c8d;
+            width: 100px;
+            flex-shrink: 0;
+        }
+        .credential-value {
+            color: #2c3e50;
+            flex: 1;
+            font-family: 'Courier New', monospace;
+            word-break: break-all;
+        }
+        .otp-display {
             font-size: 2.5rem;
-            font-weight: bold;
-            color: #00d4ff;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
-            transition: opacity 0.5s ease;
+            font-weight: 600;
+            color: #3498db;
+            letter-spacing: 4px;
+            text-align: center;
+            padding: 20px 0;
         }
         .progress {
-            height: 12px;
-            border-radius: 6px;
-            background: rgba(255, 255, 255, 0.3);
+            height: 6px;
+            border-radius: 3px;
+            background: #ecf0f1;
+            overflow: hidden;
         }
         .progress-bar {
-            background: linear-gradient(90deg, #00d4ff 0%, #090979 100%);
-            transition: width 1s ease;
-            border-radius: 6px;
-        }
-        .text-center.mt-2 {
-            color: #333;
-            font-weight: 500;
+            background: #3498db;
+            transition: width 1s linear;
+            border-radius: 3px;
         }
         .progress-bar.danger {
-            background: linear-gradient(90deg, #ff6b6b 0%, #ee5a24 100%);
+            background: #e74c3c;
+        }
+        .time-remaining {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+            text-align: center;
+            margin-top: 8px;
         }
         .fa-copy {
             cursor: pointer;
-            margin-left: 10px;
+            color: #95a5a6;
             transition: color 0.3s;
+            font-size: 0.9rem;
         }
         .fa-copy:hover {
-            color: #00d4ff;
+            color: #3498db;
+        }
+        .btn-link {
+            color: #3498db;
+            text-decoration: none;
+            font-size: 0.85rem;
+            padding: 0;
+        }
+        .btn-link:hover {
+            color: #2980b9;
+            text-decoration: none;
         }
         .toast {
             position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: rgba(0, 0, 0, 0.8);
+            bottom: 30px;
+            right: 30px;
+            background: #2c3e50;
             color: white;
-            padding: 10px 20px;
-            border-radius: 5px;
+            padding: 12px 24px;
+            border-radius: 8px;
             opacity: 0;
-            transition: opacity 0.5s;
+            transition: opacity 0.3s;
             z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         }
         .toast.show {
             opacity: 1;
+        }
+        .group-header {
+            background: #ffffff;
+            border: 1px solid #e1e8ed;
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        }
+        .group-header:hover {
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+            background: #f8f9fa;
+        }
+        .group-title {
+            color: #2c3e50;
+            font-weight: 600;
+            font-size: 1.2rem;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .group-count {
+            background: #3498db;
+            color: white;
+            font-size: 0.85rem;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-weight: 500;
+        }
+        .group-toggle {
+            color: #7f8c8d;
+            transition: transform 0.3s ease;
+            font-size: 1.2rem;
+        }
+        .group-toggle.expanded {
+            transform: rotate(180deg);
+        }
+        .group-items {
+            display: none;
+            margin-bottom: 30px;
+        }
+        .group-items.expanded {
+            display: block;
         }
     </style>
 </head>
 <body>
     <div class="container mt-5">
-        <h1 class="text-center">OTP Generator</h1>
+        <h1 class="text-center">Xác thực 2 bước</h1>
         <div id="otp-list" class="mt-4">
             <!-- OTP items will be inserted here -->
         </div>
@@ -106,6 +210,13 @@
 
     <script src='totp.js'></script>
     <script>
+        // Track which groups are expanded - load from localStorage
+        const expandedGroups = new Set(JSON.parse(localStorage.getItem('expandedGroups') || '[]'));
+
+        function saveExpandedState() {
+            localStorage.setItem('expandedGroups', JSON.stringify([...expandedGroups]));
+        }
+
         async function loadData() {
             try {
                 const response = await fetch('data.json');
@@ -145,31 +256,134 @@
             return 30 - (now % 30);
         }
 
+        function getFavicon(url, size = 64) {
+            try {
+                const { hostname } = new URL(url);
+                return `https://www.google.com/s2/favicons?domain=${hostname}&sz=${size}`;
+            } catch {
+                return `https://www.google.com/s2/favicons?domain=default&sz=${size}`;
+            }
+        }
+
+        function toggleGroup(groupName) {
+            const groupItems = document.getElementById(`group-${groupName}`);
+            const groupToggle = document.getElementById(`toggle-${groupName}`);
+            
+            if (expandedGroups.has(groupName)) {
+                expandedGroups.delete(groupName);
+                groupItems.classList.remove('expanded');
+                groupToggle.classList.remove('expanded');
+            } else {
+                expandedGroups.add(groupName);
+                groupItems.classList.add('expanded');
+                groupToggle.classList.add('expanded');
+            }
+            
+            // Save state to localStorage
+            saveExpandedState();
+        }
+
         function renderOTPList(data) {
             const otpList = document.getElementById('otp-list');
             otpList.innerHTML = '';
 
+            // Group items by group field
+            const groups = {};
             for (const [account, config] of Object.entries(data)) {
-                if (config.type === 'totp') {
+                if (config.type === 'totp' && !config.hidden) {
+                    const groupName = config.group || 'Other';
+                    if (!groups[groupName]) {
+                        groups[groupName] = [];
+                    }
+                    groups[groupName].push({ account, config });
+                }
+            }
+
+            // Render each group
+            for (const [groupName, items] of Object.entries(groups)) {
+                // Create group header
+                const groupHeader = document.createElement('div');
+                groupHeader.className = 'group-header';
+                groupHeader.onclick = () => toggleGroup(groupName);
+                groupHeader.innerHTML = `
+                    <div class="group-title">
+                        <i class="fas fa-folder"></i>
+                        ${groupName}
+                        <span class="group-count">${items.length}</span>
+                    </div>
+                    <i id="toggle-${groupName}" class="fas fa-chevron-down group-toggle ${expandedGroups.has(groupName) ? 'expanded' : ''}"></i>
+                `;
+                otpList.appendChild(groupHeader);
+
+                // Create group items container
+                const groupItemsDiv = document.createElement('div');
+                groupItemsDiv.id = `group-${groupName}`;
+                groupItemsDiv.className = `group-items ${expandedGroups.has(groupName) ? 'expanded' : ''}`;
+
+                // Render items in group
+                items.forEach(({ account, config }) => {
                     const otp = generateOTP(config.secret);
                     const timeRemaining = getTimeRemaining();
                     const progress = ((30 - timeRemaining) / 30) * 100;
 
                     const card = document.createElement('div');
-                    card.className = 'card mb-3';
+                    card.className = 'card';
                     const progressBarClass = timeRemaining <= 5 ? 'progress-bar danger' : 'progress-bar';
+                    
+                    const faviconUrl = config.url ? getFavicon(config.url) : '';
+                    const faviconHtml = faviconUrl ? `<img src="${faviconUrl}" class="favicon" alt="favicon">` : '<i class="fas fa-lock" style="font-size: 24px; margin-right: 12px; color: #95a5a6;"></i>';
+                    
+                    let credentialsHtml = '';
+                    if (config.username || config.url) {
+                        credentialsHtml = '<div style="padding: 0 20px 16px 20px;">';
+                        
+                        if (config.url) {
+                            credentialsHtml += `
+                                <div class="credential-row">
+                                    <span class="credential-label">URL</span>
+                                    <span class="credential-value">
+                                        <a href="${config.url}" target="_blank" class="btn-link">${config.url}</a>
+                                    </span>
+                                    <i class="fas fa-copy" onclick="copyToClipboard('${config.url.replace(/'/g, "\\'")}')"></i>
+                                </div>
+                            `;
+                        }
+                        
+                        if (config.username) {
+                            credentialsHtml += `
+                                <div class="credential-row">
+                                    <span class="credential-label">Username</span>
+                                    <span class="credential-value">${config.username}</span>
+                                    <i class="fas fa-copy" onclick="copyToClipboard('${config.username.replace(/'/g, "\\'")}')"></i>
+                                </div>
+                            `;
+                        }
+                        
+                        credentialsHtml += '</div>';
+                    }
+                    
                     card.innerHTML = `
+                        <div class="card-header">
+                            ${faviconHtml}
+                            <h5 class="card-title">${account}</h5>
+                            <i class="fas fa-copy" onclick="copyToClipboard('${account.replace(/'/g, "\\'")}')"></i>
+                        </div>
                         <div class="card-body">
-                            <h5 class="card-title"><i class="fas fa-lock"></i> ${account} <i class="fas fa-copy" onclick="copyToClipboard('${account}')"></i></h5>
-                            <h2 class="card-text text-center font-weight-bold fade-in">${otp} <i class="fas fa-copy" onclick="copyToClipboard('${otp}')"></i></h2>
-                            <div class="progress mt-3">
-                                <div class="${progressBarClass}" role="progressbar" style="width: ${progress}%" aria-valuenow="${progress}" aria-valuemin="0" aria-valuemax="100"></div>
+                            ${credentialsHtml}
+                            <div class="otp-display">
+                                ${otp}
+                                <i class="fas fa-copy" onclick="copyToClipboard('${otp}')" style="font-size: 1.5rem; margin-left: 15px;"></i>
                             </div>
-                            <p class="text-center mt-2">Expires in ${timeRemaining} seconds</p>
+                            <div class="progress">
+                                <div class="${progressBarClass}" role="progressbar" style="width: ${progress}%"></div>
+                            </div>
+                            <p class="time-remaining">Expires in ${timeRemaining} seconds</p>
                         </div>
                     `;
-                    otpList.appendChild(card);
-                }
+                    groupItemsDiv.appendChild(card);
+                });
+
+                otpList.appendChild(groupItemsDiv);
             }
         }
 
