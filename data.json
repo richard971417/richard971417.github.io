@@ -1,4 +1,12 @@
 {
+    "dantruongzzz@tempmail.id.vn":{
+        "secret" : "EJ6K2Z7UMLYEHV3BTIG4QT7M5W4ZZ6JU",
+        "type" : "totp",
+        "username": "dantruongzzz@tempmail.id.vn",
+        "group": "ChatGPT",
+        "url": "https://chatgpt.com/",
+        "hidden": false
+    },
     "dtruong333@mmocommunity.io.vn":{
         "secret" : "DZC45N3SRPCXGDHGB3LABIKQQSBPP5ND",
         "type" : "totp",
