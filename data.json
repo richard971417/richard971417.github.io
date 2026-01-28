@@ -1,4 +1,12 @@
 {
+    "maiyeulhas@gmail.com":{
+        "secret" : "3U32IQGIXX6FG23BKAU3X4M4SPURR6ZS",
+        "type" : "totp",
+        "username": "maiyeulhas@gmail.com",
+        "group": "ChatGPT",
+        "url": "https://chatgpt.com/",
+        "hidden": false
+    },
     "dantruongzzz@tempmail.id.vn":{
         "secret" : "EJ6K2Z7UMLYEHV3BTIG4QT7M5W4ZZ6JU",
         "type" : "totp",
